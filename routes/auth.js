@@ -11,7 +11,7 @@ router.get(
   "/auth/github/callback",
   passport.authenticate("github", {
     failureRedirect: "/api-docs",
-    session: false,
+    session: true,
   }),
   (req, res) => {
     req.session.user = req.user;
