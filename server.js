@@ -3,12 +3,17 @@ const app = express();
 const connectDB = require("./db/connect");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const session = require("express-session");
+const passport = require("passport");
+
+//Load Config
+dotenv.config();
+
+require("./config/passport");
 
 // Import Routes and Error Handler
 const routes = require("./routes/index");
 const errorHandler = require("./middleware/errorHandler");
-//Load Config
-dotenv.config();
 
 // connect database
 connectDB();
@@ -16,6 +21,19 @@ connectDB();
 // Middleware
 app.use(cors()); // Enable CORS for external calls
 app.use(express.json());
+
+//SESSION
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "secret",
+    resave: false,
+    saveUninitialized: true,
+  }),
+);
+
+//PASSPORT
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allowed-Origin", "*");

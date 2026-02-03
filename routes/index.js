@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
+
+
 router.use("/", require("./swagger"));
+router.use('/', require('./auth'));
 
 router.get("/", (req, res) => {
   //#swagger.tags = ['Task Management API is running...']

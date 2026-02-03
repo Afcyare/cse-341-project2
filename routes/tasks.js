@@ -1,23 +1,36 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const tasksController = require('../controllers/tasks');
-const { taskValidationRules, validate } = require('../middleware/validate');
+const tasksController = require("../controllers/tasks");
+const { taskValidationRules, validate } = require("../middleware/validate");
+const { isAuthenticated } = require("../middleware/authenticate");
 
 // @route   GET /tasks
 // No validation needed for fetching
-router.get('/', tasksController.getTasks);
+router.get("/", tasksController.getTasks);
 
 // @route   GET /tasks/:id
-router.get('/:id', tasksController.getTaskById);
+router.get("/:id", tasksController.getTaskById);
 
 // @route   POST /tasks
 // 1. Check rules -> 2. Handle validation errors -> 3. Run controller
-router.post('/', taskValidationRules(), validate, tasksController.createTask);
+router.post(
+  "/",
+  isAuthenticated,
+  taskValidationRules(),
+  validate,
+  tasksController.createTask,
+);
 
 // @route   PUT /tasks/:id
-router.put('/:id', taskValidationRules(), validate, tasksController.updateTask);
+router.put(
+  "/:id",
+  isAuthenticated,
+  taskValidationRules(),
+  validate,
+  tasksController.updateTask,
+);
 
 // @route   DELETE /tasks/:id
-router.delete('/:id', tasksController.deleteTask);
+router.delete("/:id", isAuthenticated, tasksController.deleteTask);
 
 module.exports = router;
