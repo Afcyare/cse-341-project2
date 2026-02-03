@@ -18,7 +18,10 @@ router.post(
   isAuthenticated,
   taskValidationRules(),
   validate,
-  tasksController.createTask,
+  (req, res) => {
+    /* #swagger.security = [{ "github_auth": ["user:email"] }] */
+    tasksController.createTask(req, res);
+  },
 );
 
 // @route   PUT /tasks/:id
@@ -27,10 +30,16 @@ router.put(
   isAuthenticated,
   taskValidationRules(),
   validate,
-  tasksController.updateTask,
+  (req, res) => {
+    /* #swagger.security = [{ "github_auth": ["user:email"] }] */
+    tasksController.updateTask(req, res);
+  },
 );
 
 // @route   DELETE /tasks/:id
-router.delete("/:id", isAuthenticated, tasksController.deleteTask);
+router.delete("/:id", isAuthenticated, (req, res) => {
+  /* #swagger.security = [{ "github_auth": ["user:email"] }] */
+  tasksController.deleteTask(req, res);
+});
 
 module.exports = router;
